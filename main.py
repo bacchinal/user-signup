@@ -18,6 +18,7 @@ def verify_form():
     name = request.form['username']
     password = request.form['password']
     verify = request.form['verify'] 
+    email = request.form['email']
     name_error = ''
     password_error = ''
     email_error = ''
@@ -45,7 +46,7 @@ def verify_form():
         password = ''
         verify = ''
     if not email == '':
-        if "" in email:
+        if " " in email:
             email_error = "That won't work for me. Please try again."
             email = ''
         elif not email.count('@') == 1:
@@ -58,15 +59,12 @@ def verify_form():
             email_error = "Well, that just won't do. Please try again."
 
     if not name_error and not password_error and not email_error:
-        user = name
-        return redirect('/valid-user?user={0}'.format(user))
+       
+        return render_template('welcome-user.html', user=name)
     else:
         
-        return render_template('user_form.html', name_error=name_error, password_error=password_error, name=name, email=email) 
+        return render_template('user_form.html', name_error=name_error, password_error=password_error, name=name, email=email, email_error=email_error) 
 
-@app.route('/valid-user')
-def valid_user():
-    user = request.args.get('user')
-    return '<h1>Welcome {0}</h1>'.format
+
 
 app.run()
